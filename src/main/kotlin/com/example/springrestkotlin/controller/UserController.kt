@@ -27,6 +27,7 @@ class UserController(
 
     @PostMapping("/login")
     fun login(@RequestBody req: UserRequest): ResponseEntity<Jwt> {
+        print(userService.findUser(req.email))
         val user: UserDto? = users[req.email]
         user ?: return ResponseEntity(HttpStatus.BAD_REQUEST)
         val jwt: Jwt = userService.login(user)
