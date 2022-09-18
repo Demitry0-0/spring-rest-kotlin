@@ -8,9 +8,10 @@ class UserEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Int = 0,
-    val login: String = "",
-    val password: String = "",
-    val jwt: String = "",
-    val first_name: String = "",
-    val last_name: String = "",
+    var login: String = "",
+    var hash_password: String = "",
+    var first_name: String = "",
+    var last_name: String = "",
+    @OneToMany(mappedBy = "user")
+    val news : List<NewsEntity> = emptyList()
 )

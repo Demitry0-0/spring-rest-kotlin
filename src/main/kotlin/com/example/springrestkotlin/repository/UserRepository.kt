@@ -6,6 +6,6 @@ import org.springframework.data.repository.CrudRepository
 
 interface UserRepository : CrudRepository<UserEntity, Int>
 {
-
-    fun findByLoginOrNull():UserEntity
+    //fun findByIdOrNUll(id: Int) : UserEntity?
+    fun findByLogin(login: String):UserEntity?
 }

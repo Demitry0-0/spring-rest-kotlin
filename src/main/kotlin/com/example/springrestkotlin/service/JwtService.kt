@@ -4,6 +4,6 @@ import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jws
 
 interface JwtService {
-    fun create(login: String): String
-    fun validate(jwt: String): Jws<Claims>
+    fun create(id:Int, login: String): String
+    fun validate(jwt: String): Jws<Claims>?
 }

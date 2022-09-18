@@ -15,20 +15,34 @@ import java.util.*
 @Service
 class JwtServiceImpl() : JwtService {
     private val keyPair: KeyPair = Keys.keyPairFor(SignatureAlgorithm.RS256)
-    override fun create(login: String): String {
-        return Jwts.builder()
+    private val minutesLeft :Long = 15
+    override fun create(id:Int, login: String): String {
+        return Jwts.builder().signWith(keyPair.private)
+            .setHeaderParam("typ", "JWT")
+            .claim("userId", id)
+            .claim("login", login)
+            .setExpiration(Date.from(Instant.now().plus(Duration.ofMinutes(minutesLeft))))
+            .compact()
+/*
+        Jwts.builder()
             .signWith(keyPair.private, SignatureAlgorithm.RS256)
             .setSubject(login)
             .setIssuer("identity")
-            .setExpiration(Date.from(Instant.now().plus(Duration.ofMinutes(15))))
             .setIssuedAt(Date.from(Instant.now()))
             .compact()
+*/
     }
 
-    override fun validate(jwt: String): Jws<Claims> {
-        return Jwts.parserBuilder()
-            .setSigningKey(keyPair.public)
+    override fun validate(jwt: String): Jws<Claims>? {
+        return try{
+            Jwts.parserBuilder()
+            .setSigningKey(keyPair.private)
             .build()
             .parseClaimsJws(jwt)
+        }
+        catch (e: io.jsonwebtoken.security.SignatureException){
+            println("ERROR: ${e.message}")
+            null
+        }
     }
 }
