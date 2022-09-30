@@ -1,6 +1,7 @@
 package com.example.springrestkotlin.controller
 
 import com.example.springrestkotlin.dto.news.NewsDto
+import com.example.springrestkotlin.res.Response
 import com.example.springrestkotlin.service.NewsService
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -14,14 +15,14 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/api")
-class News(
+class News (
     private val newsService: NewsService
 ) {
     @GetMapping("/feed")
     fun getAllNews(
         @RequestParam("page", defaultValue = "0") pageIndex: Int,
         @RequestParam("size", defaultValue = "10") pageSize: Int
-    ): List<NewsDto> = newsService.getAll(pageIndex, pageSize)
+    ): Response<*> = newsService.getAll(pageIndex, pageSize)
 
     @PostMapping("/feed")
     fun addNews(@RequestHeader("Authorization") authHeader: String, @RequestBody newsDto: NewsDto) {

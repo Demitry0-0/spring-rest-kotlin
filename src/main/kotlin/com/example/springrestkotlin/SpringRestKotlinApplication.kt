@@ -11,6 +11,7 @@ import io.jsonwebtoken.security.Keys;
 import java.math.BigInteger
 import java.security.Key;
 import java.security.MessageDigest
+import java.time.Duration
 import java.time.Instant
 
 
@@ -41,10 +42,12 @@ fun example2(){
 	//var keyStr = "DummyKeyStringDummyKeyStringDummyKeyStringDummyKeyStringDummyKeyStringDummyKeyString"
 	//val key = Keys.hmacShaKeyFor(keyStr.toByteArray())
 	val signingKey = Keys.secretKeyFor(SignatureAlgorithm.HS512)
-	val jwt = Jwts.builder().claim("userId", 1).signWith(signingKey).compact()
+	val jwt = Jwts.builder().claim("userId", 1).signWith(signingKey)
+		.setExpiration(Date.from(Instant.now().plus(Duration.ofMinutes(1)))).compact()
 // => example2Jwt: eyJhbGciOiJIUzUxMiJ9.eyJ1c2VySWQiOjF9.VApKjgGHRqTB-LZaYw33kf0ovTjgpCb153HRxQCfiYBQGfLwu0fSsRQHv4dAeCm33YNxAgLJ5doi6G2bCIBS5A
-
 	System.out.println("example2Jwt: $jwt")
+
+	Thread.sleep(60000);
 	val claims = Jwts.parser()
 		.setSigningKey(signingKey)
 		.parseClaimsJws(jwt)
@@ -53,14 +56,10 @@ fun example2(){
 }
 
 fun main(args: Array<String>) {
-//println(Date.from(Instant.now()))
+
+	//println(Date.from(Instant.now()))
 	runApplication<SpringRestKotlinApplication>(*args)
 	//example1()
 	//example2()
-	/*
-	* user_id
-	* login
-	* exp
-	*/
 
 }

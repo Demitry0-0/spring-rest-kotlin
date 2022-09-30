@@ -3,6 +3,7 @@ package com.example.springrestkotlin.controller
 import com.example.springrestkotlin.dto.user.UserLogin
 import com.example.springrestkotlin.dto.user.UserNullDto
 import com.example.springrestkotlin.dto.user.UserRegister
+import com.example.springrestkotlin.res.Response
 import com.example.springrestkotlin.service.UserService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.RestController
@@ -27,16 +28,16 @@ class User(
 
 
     @PostMapping("/login")
-    fun login(@RequestBody req: UserLogin): ResponseEntity<MutableMap<String, String>> {
+    fun login(@RequestBody req: UserLogin): Response<*> {
         return userService.login(req)
     }
 
     @PostMapping("/registration")
-    fun registration(@RequestBody register: UserRegister): ResponseEntity<MutableMap<String, String>> {
+    fun registration(@RequestBody register: UserRegister): Response<*> {
         return userService.registration(register)
     }
     @GetMapping("/profile")
-    fun getProfile(@RequestHeader("Authorization") authHeader: String): ResponseEntity<MutableMap<String, String>>
+    fun getProfile(@RequestHeader("Authorization") authHeader: String): Response<*>
     = userService.getProfile(authHeader.jwt())
 
     @PutMapping("/profile")
